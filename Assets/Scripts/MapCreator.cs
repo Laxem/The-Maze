@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class MapCreator
+public class MapCreator : MonoBehaviour
 {
     //Attributs
 

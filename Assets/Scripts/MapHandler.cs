@@ -3,22 +3,23 @@ using System;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 
-namespace Completed
+namespace Game
 {
-
     public class MapHandler : MonoBehaviour
     {
-        public int sizeMaze = 5;
+        public int sizeMaze;
 
         public GameObject depart;
         public GameObject exit;                                        
         public GameObject floorTiles;                           
         public GameObject wallTiles;
+        public GameObject player;
+        public GameObject key;
 
         private Transform boardHolder;
         private List <Vector3> Map = new List <Vector3> ();
 
-        void InitMap()
+        private void InitMap()
         {
             Map.Clear();
             
@@ -29,8 +30,10 @@ namespace Completed
             }
         }
 
-        void BoardSetup()
+        private void BoardSetup()
         {
+            int coorXDepart = 0;
+            int coorYDepart = 0;
             boardHolder = new GameObject("Board").transform;
 
             for (int x = 0; x < sizeMaze; x++)
@@ -44,6 +47,8 @@ namespace Completed
                     else if(x == 1 && y == 1)
                     {
                         toInstantiate = depart;
+                        coorXDepart = 1;
+                        coorYDepart = 1;
                     }
                     else if (x == sizeMaze-2 && y == sizeMaze-2)
                     {
@@ -54,22 +59,26 @@ namespace Completed
                         Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
 
                     instance.transform.SetParent(boardHolder);
+
                 }
             }
+             
+            Instantiate(player, new Vector3(coorXDepart, coorYDepart, 0f), Quaternion.identity);
+
+            Instantiate(key, new Vector3(1f, 4f, 0f), Quaternion.identity);
+
         }
 
         // Use this for initialization
-        void Start()
+        public void CreatMap(int sizeMap)
         {
-            BoardSetup();
+            sizeMaze = sizeMap;
+            
             
             InitMap();
 
-            /*GameObject instance = Instantiate(depart, new Vector3(1, 1, 0f), Quaternion.identity) as GameObject;
-            instance.transform.SetParent(boardHolder);
-            instance = Instantiate(exit, new Vector3(sizeMaze - 2, sizeMaze - 2, 0f), Quaternion.identity) as GameObject;
-            instance.transform.SetParent(boardHolder);
-            */
+            BoardSetup();
+
         }
 
         // Update is called once per frame

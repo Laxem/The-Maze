@@ -2,7 +2,7 @@
 using System.Collections;
 
 
-public class Coordonnée
+public class Coordonnée : MonoBehaviour
 {
     //Attributs
 
