@@ -31,16 +31,14 @@ namespace Game
 
         private void BoardSetup(int sizeMap)
         {
-            int coorXDepart = 0;
-            int coorYDepart = 0;
             boardHolder = new GameObject("Board").transform;
-
             
             Map maze = Map.creerLabyrinthe(sizeMap, sizeMap);
 
-
             GameObject instance;
 
+            Coordonnée coorDepart = new Coordonnée();
+            Coordonnée coorExit = new Coordonnée();
 
             for (int x = 0; x < maze.getSize().getX(); x++)
             {
@@ -53,8 +51,7 @@ namespace Game
                     else if (maze.getVal(x, y) == 2)
                     {
                         toInstantiate = depart;
-                        coorXDepart = x+1;
-                        coorYDepart = y+1;
+                        coorDepart.setVal(x + 1, y + 1);
                     }
                     else if (maze.getVal(x, y) == 3)
                     {
@@ -81,16 +78,51 @@ namespace Game
                 }
             }
 
-            instance = Instantiate(player, new Vector3(coorXDepart, coorYDepart, 0f), Quaternion.identity) as GameObject;
+            instance = Instantiate(player, new Vector3(coorDepart.getX(), coorDepart.getY(), 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
-            instance = Instantiate(key, new Vector3(1f+1, 4f+1, 0f), Quaternion.identity) as GameObject;
+            PlaceKey(boardHolder, maze, coorDepart, coorExit);
+        }
+
+        public void PlaceKey(Transform boardHolder, Map carte, Coordonnée depart, Coordonnée exit)
+        {
+            List<Coordonnée> listCoor = new List<Coordonnée>();
+
+            int sizeMap = Mathf.Min(carte.getSize().getX(), carte.getSize().getY());
+            int distance = (sizeMap - (sizeMap % 1)) / 2; 
+            
+            for (int x = 1; x < carte.getSize().getX()-1; x++) // ajout de mur invisible autour du labyrinthe
+            {
+                for (int y = 1; y < carte.getSize().getY()-1; y++)
+                {
+                    int contactWall = 0;
+                    if (carte.getVal(x, y) == 0)
+                    {
+                        for (int i = x - 1; i < x + 2; i++)
+                        {
+                            for (int j = y - 1; j < y + 2; j++)
+                            {
+                                if (i == x || j == y)
+                                {
+                                    if (carte.getVal(i, j) == 1) contactWall++;
+                                }
+                            }
+                        }
+                        if (contactWall == 3 && CheckDistance(new Coordonnée(x, y), depart, exit, distance)) listCoor.Add(new Coordonnée(x, y));
+                    }
+                    
+                }
+            }
+            Coordonnée coorKey = listCoor[Random.Range(0, listCoor.Count)];
+            GameObject instance = Instantiate(key, new Vector3(coorKey.getX() + 1, coorKey.getY()+ 1, 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
         }
 
-        /*public void PlaceKey(Transform boardHolder, )
+        public bool CheckDistance(Coordonnée key, Coordonnée depart, Coordonnée exit, int distance)
         {
-
-        }*/
+            if ((Mathf.Abs(key.getX() - depart.getX()) + Mathf.Abs(key.getY() - depart.getY())) < distance) return false;
+            else if ((Mathf.Abs(key.getX() - exit.getX()) + Mathf.Abs(key.getY() - exit.getY())) < distance) return false;
+            else return true;
+        }
 
         // Use this for initialization
         public void CreatMap(int sizeMap)
