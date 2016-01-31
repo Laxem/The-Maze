@@ -10,7 +10,7 @@ namespace Game
 
         public static GameHandler instance = null;
         private MapHandler MapScript;
-        private int sizeMap = 7;
+        private int sizeMap = 23;
         [HideInInspector]public bool keyTaken;
 
         void Awake()
@@ -44,6 +44,12 @@ namespace Game
         public void CheckIfGameOver()
         {
             //MovementHandler.pause = true;
+        }
+
+        public bool CanExit()
+        {
+            return keyTaken ? true : false;
+            
         }
     }
 }

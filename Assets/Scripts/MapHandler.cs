@@ -7,77 +7,97 @@ namespace Game
 {
     public class MapHandler : MonoBehaviour
     {
-        public int sizeMaze;
-
         public GameObject depart;
         public GameObject exit;                                        
-        public GameObject floorTiles;                           
-        public GameObject wallTiles;
+        public GameObject floor;                           
+        public GameObject wall;
+        public GameObject invisibleWall;
         public GameObject player;
         public GameObject key;
 
         private Transform boardHolder;
-        private List <Vector3> Map = new List <Vector3> ();
+        //private List <Vector3> map = new List <Vector3> ();
 
         private void InitMap()
-        {
-            Map.Clear();
+        {/*
+            map.Clear();
             
-            for (int x = 0; x < sizeMaze; x++){
+            for (int x = 0; x < sizeMap; x++){
                 for (int y = 0; y < sizeMaze; y++){
-                    Map.Add(new Vector3(x, y, 0f));
+                    map.Add(new Vector3(x, y, 0f));
                 }
-            }
+            }*/
         }
 
-        private void BoardSetup()
+        private void BoardSetup(int sizeMap)
         {
             int coorXDepart = 0;
             int coorYDepart = 0;
             boardHolder = new GameObject("Board").transform;
 
-            for (int x = 0; x < sizeMaze; x++)
-            {
-                for (int y = 0; y < sizeMaze; y++)
-                {
-                    GameObject toInstantiate = floorTiles;
+            
+            Map maze = Map.creerLabyrinthe(sizeMap, sizeMap);
 
-                    if (x == 0 || x == sizeMaze-1 || y == 0 || y == sizeMaze-1)
-                        toInstantiate = wallTiles;
-                    else if(x == 1 && y == 1)
+
+            GameObject instance;
+
+
+            for (int x = 0; x < maze.getSize().getX(); x++)
+            {
+                for (int y = 0; y < maze.getSize().getY(); y++)
+                {
+                    GameObject toInstantiate;
+
+                    if (maze.getVal(x, y) == 1)
+                        toInstantiate = wall;
+                    else if (maze.getVal(x, y) == 2)
                     {
                         toInstantiate = depart;
-                        coorXDepart = 1;
-                        coorYDepart = 1;
+                        coorXDepart = x+1;
+                        coorYDepart = y+1;
                     }
-                    else if (x == sizeMaze-2 && y == sizeMaze-2)
+                    else if (maze.getVal(x, y) == 3)
                     {
                         toInstantiate = exit;
                     }
+                    else toInstantiate = floor;
 
-                    GameObject instance =
-                        Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                    instance = Instantiate(toInstantiate, new Vector3(x+1, y+1, 0f), Quaternion.identity) as GameObject;
 
                     instance.transform.SetParent(boardHolder);
 
                 }
             }
-             
-            Instantiate(player, new Vector3(coorXDepart, coorYDepart, 0f), Quaternion.identity);
 
-            Instantiate(key, new Vector3(1f, 4f, 0f), Quaternion.identity);
+            for (int x = 0; x < maze.getSize().getX() + 2; x++) // ajout de mur invisible autour du labyrinthe
+            {
+                for (int y = 0; y < maze.getSize().getY() + 2; y++)
+                {
+                    if (x == 0 || x == (maze.getSize().getX() + 1) || y == 0 || y == (maze.getSize().getY() + 1))
+                    {
+                        instance = Instantiate(invisibleWall, new Vector3(x, y, 0f), Quaternion.identity) as GameObject;
+                        instance.transform.SetParent(boardHolder);
+                    }
+                }
+            }
 
+            instance = Instantiate(player, new Vector3(coorXDepart, coorYDepart, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(boardHolder);
+            instance = Instantiate(key, new Vector3(1f+1, 4f+1, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(boardHolder);
         }
+
+        /*public void PlaceKey(Transform boardHolder, )
+        {
+
+        }*/
 
         // Use this for initialization
         public void CreatMap(int sizeMap)
-        {
-            sizeMaze = sizeMap;
-            
-            
+        {            
             InitMap();
 
-            BoardSetup();
+            BoardSetup(sizeMap);
 
         }
 

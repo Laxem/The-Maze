@@ -6,10 +6,11 @@ namespace Game
 {
     public class PlayerMovement : MonoBehaviour
     {
-        private float moveSpeed = 3f;
+        private float moveSpeed = 5f;
         private LayerMask blockingLayer;
         //public GameHandler gameHandler;
         private BoxCollider2D boxCollider;
+        private Rigidbody2D rigidB;
         [HideInInspector] public static bool pause = false;
 
         private string horizontalAxeName;
@@ -19,6 +20,7 @@ namespace Game
         protected void Start()
         {
             boxCollider = GetComponent<BoxCollider2D>();
+            rigidB = GetComponent<Rigidbody2D>();
 
             horizontalAxeName = "Horizontal";
             verticalAxeName = "Vertical";
@@ -39,7 +41,9 @@ namespace Game
             {
                 //Debug.Log(horizontal + " " + vertical);
 
-                InputToDir(ref horizontal, ref vertical);              
+                //InputToDir(ref horizontal, ref vertical);              
+                horizontal = horizontal * moveSpeed * Time.deltaTime;
+                vertical = vertical * moveSpeed * Time.deltaTime;
 
                 Move(horizontal, vertical);
             }
@@ -77,8 +81,7 @@ namespace Game
             //Debug.Log(hit.distance);
             if (hit.collider == null)
             {
-                Debug.Log(hit.distance);
-                transform.position = end;
+                rigidB.MovePosition(end);
 
                 return true;
             }
@@ -94,24 +97,19 @@ namespace Game
         //OnTriggerEnter2D is sent when another object enters a trigger collider attached to this object (2D physics only).
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log(other.tag);
             //Check if the tag of the trigger collided with is Exit.
             if (other.tag == "Exit")
             {
-                pause = true;
+                
+                //pause = true;
                 //Disable the player object since level is over.
-                enabled = false;
+                if(GameHandler.instance.CanExit()) enabled = false;
             }
             else if(other.tag == "Key")
             {
                 Key key = other.gameObject.GetComponent("Key") as Key;
                 key.TouchPlayer();       
             }
-        }
-
-        private void OnCollideEnter2D(Collider2D other)
-        {
-            Debug.Log(other.name);
         }
 
     }
