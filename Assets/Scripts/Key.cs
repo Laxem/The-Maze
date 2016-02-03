@@ -5,10 +5,17 @@ namespace Game
 {
     public class Key : MonoBehaviour
     {
+        private GameHandler gameHandler;
+        
+        void Start()
+        {
+            gameHandler = GameObject.FindGameObjectWithTag("MainCamera")
+                .GetComponent<GameHandler>();
+        }
 
         public void TouchPlayer()
         {
-            GameHandler.instance.keyTaken = true;
+            gameHandler.keyTaken = true;
             gameObject.SetActive(false);
                 
         }
