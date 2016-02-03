@@ -47,7 +47,6 @@ namespace Game
 
             // limite angular acceleration
             float diffAngle = Mathf.Abs(Mathf.DeltaAngle(lastAngle , angle));
-            Debug.Log(diffAngle+" "+ angularMoveSpeed * Time.fixedDeltaTime);
             if (diffAngle > (angularMoveSpeed * Time.fixedDeltaTime))
                 angle = lastAngle + Mathf.Sign(Mathf.DeltaAngle(lastAngle, angle)) * angularMoveSpeed * Time.fixedDeltaTime; 
 

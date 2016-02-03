@@ -11,6 +11,7 @@ namespace Game
         //public GameHandler gameHandler;
         private BoxCollider2D boxCollider;
         private Rigidbody2D rigidB;
+        private GameObject camera;
         [HideInInspector] public static bool pause = false;
 
         private string horizontalAxeName;
@@ -26,6 +27,7 @@ namespace Game
             verticalAxeName = "Vertical";
 
             blockingLayer = LayerMask.NameToLayer("Blocking Layer");
+            camera = GameObject.FindGameObjectWithTag("MainCamera");
         }
 
         private void Update()
@@ -39,8 +41,6 @@ namespace Game
             //Check if we have a non-zero value for horizontal or vertical
             if (horizontal != 0 || vertical != 0)
             {
-                //Debug.Log(horizontal + " " + vertical);
-
                 //InputToDir(ref horizontal, ref vertical);              
                 horizontal = horizontal * moveSpeed * Time.deltaTime;
                 vertical = vertical * moveSpeed * Time.deltaTime;
@@ -48,6 +48,14 @@ namespace Game
                 Move(horizontal, vertical);
             }
 
+            CameraHandler camerahandler = camera.GetComponent<CameraHandler>();
+            camerahandler.SetPlayerPosition(transform.position);
+            /*
+            camera.position = transform.position;
+            Vector3 CamPos = new Vector3(camera.position.x, camera.position.y, -1f);
+            camera.position = CamPos;
+            Debug.Log(camera.position + " " + transform.position);
+            */
         }
 
         private void InputToDir(ref float horizontal, ref float vertical)

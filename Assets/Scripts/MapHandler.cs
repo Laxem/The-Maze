@@ -81,6 +81,7 @@ namespace Game
 
             instance = Instantiate(player, new Vector3(coorDepart.getX(), coorDepart.getY(), 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
+
             PlaceKeyAndGhost(boardHolder, maze, coorDepart, coorExit);
         }
 
