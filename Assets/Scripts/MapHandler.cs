@@ -14,6 +14,7 @@ namespace Game
         public GameObject invisibleWall;
         public GameObject player;
         public GameObject key;
+        public GameObject ghost;
 
         private Transform boardHolder;
         //private List <Vector3> map = new List <Vector3> ();
@@ -80,15 +81,17 @@ namespace Game
 
             instance = Instantiate(player, new Vector3(coorDepart.getX(), coorDepart.getY(), 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
-            PlaceKey(boardHolder, maze, coorDepart, coorExit);
+            PlaceKeyAndGhost(boardHolder, maze, coorDepart, coorExit);
         }
 
-        public void PlaceKey(Transform boardHolder, Map carte, Coordonnée depart, Coordonnée exit)
+        public void PlaceKeyAndGhost(Transform boardHolder, Map carte, Coordonnée depart, Coordonnée exit)
         {
-            List<Coordonnée> listCoor = new List<Coordonnée>();
+            List<Coordonnée> listCoorKey = new List<Coordonnée>();
+            List<Coordonnée> listCoorGhost = new List<Coordonnée>();
 
             int sizeMap = Mathf.Min(carte.getSize().getX(), carte.getSize().getY());
-            int distance = (sizeMap - (sizeMap % 1)) / 2; 
+            int distanceKey = (sizeMap - (sizeMap % 1)) / 2;
+            int distanceGhost = (sizeMap + 1) / 2;
             
             for (int x = 1; x < carte.getSize().getX()-1; x++) // ajout de mur invisible autour du labyrinthe
             {
@@ -97,6 +100,7 @@ namespace Game
                     int contactWall = 0;
                     if (carte.getVal(x, y) == 0)
                     {
+                        
                         for (int i = x - 1; i < x + 2; i++)
                         {
                             for (int j = y - 1; j < y + 2; j++)
@@ -107,20 +111,24 @@ namespace Game
                                 }
                             }
                         }
-                        if (contactWall == 3 && CheckDistance(new Coordonnée(x, y), depart, exit, distance)) listCoor.Add(new Coordonnée(x, y));
+                        if (contactWall == 3 && CheckDistance(new Coordonnée(x, y), depart, distanceKey) && CheckDistance(new Coordonnée(x, y), exit, distanceKey)) listCoorKey.Add(new Coordonnée(x, y));
+                        else if (CheckDistance(new Coordonnée(x, y), depart, distanceGhost)) listCoorGhost.Add(new Coordonnée(x, y));
                     }
                     
                 }
             }
-            Coordonnée coorKey = listCoor[Random.Range(0, listCoor.Count)];
+            Coordonnée coorKey = listCoorKey[Random.Range(0, listCoorKey.Count)];
             GameObject instance = Instantiate(key, new Vector3(coorKey.getX() + 1, coorKey.getY()+ 1, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(boardHolder);
+
+            Coordonnée coorGhost = listCoorGhost[Random.Range(0, listCoorGhost.Count)];
+            instance = Instantiate(ghost, new Vector3(coorGhost.getX() + 1, coorGhost.getY() + 1, 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
         }
 
-        public bool CheckDistance(Coordonnée key, Coordonnée depart, Coordonnée exit, int distance)
+        public bool CheckDistance(Coordonnée a, Coordonnée b, int distance)
         {
-            if ((Mathf.Abs(key.getX() - depart.getX()) + Mathf.Abs(key.getY() - depart.getY())) < distance) return false;
-            else if ((Mathf.Abs(key.getX() - exit.getX()) + Mathf.Abs(key.getY() - exit.getY())) < distance) return false;
+            if ((Mathf.Abs(a.getX() - b.getX()) + Mathf.Abs(a.getY() - b.getY())) < distance) return false;
             else return true;
         }
 

@@ -110,6 +110,10 @@ namespace Game
                 Key key = other.gameObject.GetComponent("Key") as Key;
                 key.TouchPlayer();       
             }
+            else if(other.tag == "foe")
+            {
+                GameHandler.instance.GameOver();
+            }
         }
 
     }

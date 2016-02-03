@@ -41,7 +41,7 @@ namespace Game
 
         }
 
-        public void CheckIfGameOver()
+        public void GameOver()
         {
             //MovementHandler.pause = true;
         }
