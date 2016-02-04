@@ -11,7 +11,7 @@ namespace Game
         //public GameHandler gameHandler;
         private BoxCollider2D boxCollider;
         private Rigidbody2D rigidB;
-        private GameObject camera;
+        //private GameObject camera;
         [HideInInspector] public static bool pause = false;
 
         private string horizontalAxeName;
@@ -27,7 +27,7 @@ namespace Game
             verticalAxeName = "Vertical";
 
             blockingLayer = LayerMask.NameToLayer("Blocking Layer");
-            camera = GameObject.FindGameObjectWithTag("MainCamera");
+            
         }
 
         private void Update()
@@ -48,8 +48,10 @@ namespace Game
                 Move(horizontal, vertical);
             }
 
-            CameraHandler camerahandler = camera.GetComponent<CameraHandler>();
+            
+            CameraHandler camerahandler =  GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraHandler>();
             camerahandler.SetPlayerPosition(transform.position);
+            Debug.Log("player "+transform.position);
             /*
             camera.position = transform.position;
             Vector3 CamPos = new Vector3(camera.position.x, camera.position.y, -1f);

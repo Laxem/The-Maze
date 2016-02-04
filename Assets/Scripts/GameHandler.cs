@@ -10,7 +10,7 @@ namespace Game
 
         public static GameHandler instance = null;
         private MapHandler MapScript;
-        private int sizeMap = 23;
+        private int sizeMap = 15;
         [HideInInspector]public bool keyTaken;
 
         void Awake()

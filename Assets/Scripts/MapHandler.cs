@@ -140,13 +140,17 @@ namespace Game
 
             BoardSetup(sizeMap);
 
+            SetCamSize(sizeMap);
+
         }
 
-        // Update is called once per frame
-        void Update()
+        void SetCamSize(int sizeMap)
         {
+            CameraHandler cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraHandler>();
+            cam.setMapSize(sizeMap);
 
         }
+        
     }
 
 }
