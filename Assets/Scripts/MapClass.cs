@@ -337,10 +337,7 @@ namespace Game
             caseDA(taille, ref depart, ref arrivee);
             carte.setVal(depart.getX(), depart.getY(), 2);
             carte.setVal(arrivee.getX(), arrivee.getY(), 3);
-
-            Debug.Log(iteration);
-            Debug.Log(mur);
-
+            
             return carte;
         }
 

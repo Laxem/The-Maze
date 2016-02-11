@@ -11,7 +11,7 @@ namespace Game
         //public GameHandler gameHandler;
         private BoxCollider2D boxCollider;
         private Rigidbody2D rigidB;
-        //private GameObject camera;
+        private GameHandler gameHandler;
         [HideInInspector] public static bool pause = false;
 
         private string horizontalAxeName;
@@ -27,7 +27,8 @@ namespace Game
             verticalAxeName = "Vertical";
 
             blockingLayer = LayerMask.NameToLayer("Blocking Layer");
-            
+            gameHandler = GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<GameHandler>();
+
         }
 
         private void Update()
@@ -49,15 +50,8 @@ namespace Game
             }
 
             
-            CameraHandler camerahandler =  GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraHandler>();
+            CameraHandler camerahandler =  GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<CameraHandler>();
             camerahandler.SetPlayerPosition(transform.position);
-            Debug.Log("player "+transform.position);
-            /*
-            camera.position = transform.position;
-            Vector3 CamPos = new Vector3(camera.position.x, camera.position.y, -1f);
-            camera.position = CamPos;
-            Debug.Log(camera.position + " " + transform.position);
-            */
         }
 
         private void InputToDir(ref float horizontal, ref float vertical)
@@ -113,7 +107,7 @@ namespace Game
                 
                 //pause = true;
                 //Disable the player object since level is over.
-                if(GameHandler.instance.CanExit()) enabled = false;
+                if(gameHandler.CanExit()) enabled = false;
             }
             else if(other.tag == "Key")
             {

@@ -9,7 +9,7 @@ namespace Game
         
         void Start()
         {
-            gameHandler = GameObject.FindGameObjectWithTag("MainCamera")
+            gameHandler = GameObject.FindGameObjectWithTag("MazeCamera")
                 .GetComponent<GameHandler>();
         }
 

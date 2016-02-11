@@ -18,6 +18,7 @@ namespace Game
 
             Camera cam = GetComponent<Camera>();
             camSize = cam.orthographicSize;
+            cam.aspect = 1f;
         }
 
         // Update is called once per frame
@@ -43,7 +44,6 @@ namespace Game
                 Vector3 CamPos = new Vector3(mapSize/2 + caseSize, mapSize/2 + caseSize, -1f);
                 transform.position = CamPos;
             }
-            Debug.Log(camSize + " " + mapSize);
         }
 
         public void SetPlayerPosition(Vector3 player)

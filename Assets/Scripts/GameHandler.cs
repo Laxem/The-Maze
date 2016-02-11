@@ -7,7 +7,6 @@ namespace Game
 
     public class GameHandler : MonoBehaviour
     {
-
         public static GameHandler instance = null;
         private MapHandler MapScript;
         private int sizeMap = 15;
@@ -34,7 +33,6 @@ namespace Game
             keyTaken = false;
 
         }
-
 
         void Update()
         {

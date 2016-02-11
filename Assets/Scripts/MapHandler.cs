@@ -146,7 +146,7 @@ namespace Game
 
         void SetCamSize(int sizeMap)
         {
-            CameraHandler cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraHandler>();
+            CameraHandler cam = GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<CameraHandler>();
             cam.setMapSize(sizeMap);
 
         }
