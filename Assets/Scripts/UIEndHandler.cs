@@ -20,12 +20,10 @@ namespace Game
         {
             if (Input.GetButtonDown("R") || Input.GetButtonDown("Enter") || Input.GetButtonDown("Return"))
             {
-                Debug.Log("enter");
                 restart.onClick.Invoke();
             }
             if (Input.GetButtonDown("Echap"))
             {
-                Debug.Log("esc");
                 GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MainCameraHandler>().ExitGame();
             }
         }

@@ -8,7 +8,8 @@ namespace Game
     public class MapHandler : MonoBehaviour
     {
         public GameObject depart;
-        public GameObject exit;                                        
+        public GameObject exit;
+        public GameObject lockExit;
         public GameObject floor;                           
         public GameObject wall;
         public GameObject invisibleWall;
@@ -52,14 +53,16 @@ namespace Game
                     }
                     else if (maze.getVal(x, y) == 3)
                     {
+                        toInstantiate = lockExit;
+                        instance = Instantiate(toInstantiate, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                        instance.transform.SetParent(boardHolder);
                         toInstantiate = exit;
                     }
                     else toInstantiate = floor;
 
                     instance = Instantiate(toInstantiate, new Vector3(x+1, y+1, 0f), Quaternion.identity) as GameObject;
-
                     instance.transform.SetParent(boardHolder);
-
+                    
                 }
             }
 

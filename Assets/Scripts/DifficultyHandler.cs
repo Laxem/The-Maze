@@ -46,7 +46,6 @@ namespace Game
         public void changeDifficulty(int newLevel)
         {
             level = newLevel;
-            Debug.Log(level);
             easy.interactable = true;
             normal.interactable = true;
             hard.interactable = true;

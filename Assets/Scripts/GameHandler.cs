@@ -45,9 +45,8 @@ namespace Game
             if (Input.GetButtonDown("Echap") || Input.GetButtonDown("Pause"))
             {
                 pause = true;
-                EnableAgent();
+                DisableAgent();
                 OpenEndWindow();
-
             }
         }
 
@@ -140,7 +139,7 @@ namespace Game
             }
         }
 
-        void EnableAgent()
+        void DisableAgent()
         {
             player.enabled = false;
             foreach (GhostMovement foe in foes)
@@ -154,30 +153,26 @@ namespace Game
             win = false;
             endGame = true;
 
-            EnableAgent();
+            DisableAgent();
 
             OpenEndWindow();
         }
         
         public void Finish()
-        {
-            win = true;
+        {            
             if (CanExit())
             {
+                win = true;
                 endGame = true;
-                player.enabled = false;
-                foreach (GhostMovement foe in foes)
-                {
-                    foe.enabled = false;
-                }
-                
+                DisableAgent();
+                OpenEndWindow();
             }
-            OpenEndWindow();
+            
         }
 
         public bool CanExit()
         {
-            return keyTaken ? true : false;
+            return keyTaken;
             
         }
     }

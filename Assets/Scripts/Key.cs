@@ -15,9 +15,11 @@ namespace Game
 
         public void TouchPlayer()
         {
+            Debug.Log("Key");
             gameHandler.keyTaken = true;
-            gameObject.SetActive(false);
-                
+            GameObject Lock = GameObject.FindGameObjectWithTag("Lock");
+            Lock.SetActive(false);
+            gameObject.SetActive(false);            
         }
     }
 }
