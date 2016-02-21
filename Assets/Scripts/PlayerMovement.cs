@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Player inherits from MovingObject, our base class for objects that can move, Enemy also inherits from this.
 namespace Game
 {
     public class PlayerMovement : MonoBehaviour
     {
         private float moveSpeed = 5f;
         private LayerMask blockingLayer;
-        //public GameHandler gameHandler;
         private BoxCollider2D boxCollider;
         private Rigidbody2D rigidB;
         private GameHandler gameHandler;
@@ -16,9 +14,8 @@ namespace Game
 
         private string horizontalAxeName;
         private string verticalAxeName;
-
-        //Start overrides the Start function of MovingObject
-        protected void Start()
+        
+        void Start()
         {
             boxCollider = GetComponent<BoxCollider2D>();
             rigidB = GetComponent<Rigidbody2D>();
@@ -31,7 +28,7 @@ namespace Game
 
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (pause) return;
 
@@ -104,19 +101,16 @@ namespace Game
             //Check if the tag of the trigger collided with is Exit.
             if (other.tag == "Exit")
             {
-                
-                //pause = true;
-                //Disable the player object since level is over.
-                if(gameHandler.CanExit()) enabled = false;
+                gameHandler.Finish();
             }
             else if(other.tag == "Key")
             {
                 Key key = other.gameObject.GetComponent("Key") as Key;
                 key.TouchPlayer();       
             }
-            else if(other.tag == "foe")
+            else if(other.tag == "Foe")
             {
-                GameHandler.instance.GameOver();
+                gameHandler.GameOver();
             }
         }
 

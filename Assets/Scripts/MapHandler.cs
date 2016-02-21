@@ -17,17 +17,13 @@ namespace Game
         public GameObject ghost;
 
         private Transform boardHolder;
-        //private List <Vector3> map = new List <Vector3> ();
 
-        private void InitMap()
-        {/*
-            map.Clear();
-            
-            for (int x = 0; x < sizeMap; x++){
-                for (int y = 0; y < sizeMaze; y++){
-                    map.Add(new Vector3(x, y, 0f));
-                }
-            }*/
+        public void CreatMap(int sizeMap)
+        {
+            BoardSetup(sizeMap);
+
+            SetCamSize(sizeMap);
+
         }
 
         private void BoardSetup(int sizeMap)
@@ -132,17 +128,8 @@ namespace Game
             if ((Mathf.Abs(a.getX() - b.getX()) + Mathf.Abs(a.getY() - b.getY())) < distance) return false;
             else return true;
         }
-
-        // Use this for initialization
-        public void CreatMap(int sizeMap)
-        {            
-            InitMap();
-
-            BoardSetup(sizeMap);
-
-            SetCamSize(sizeMap);
-
-        }
+        
+        
 
         void SetCamSize(int sizeMap)
         {

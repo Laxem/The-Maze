@@ -10,6 +10,7 @@ namespace Game
         private int mapSize;
         private float camSize;
         private float caseSize = 1f;
+        Transform menuCamera;
 
         // Use this for initialization
         void Start()
@@ -19,12 +20,15 @@ namespace Game
             Camera cam = GetComponent<Camera>();
             camSize = cam.orthographicSize;
             cam.aspect = 1f;
+
+            menuCamera = GameObject.FindGameObjectWithTag("MainCamera").transform;
         }
 
         // Update is called once per frame
         void FixedUpdate()
         {
             Move();
+            MoveMainCamera();
         }
 
         void Move()
@@ -44,6 +48,11 @@ namespace Game
                 Vector3 CamPos = new Vector3(mapSize/2 + caseSize, mapSize/2 + caseSize, -1f);
                 transform.position = CamPos;
             }
+        }
+
+        void MoveMainCamera()
+        {
+            menuCamera.position = transform.position;
         }
 
         public void SetPlayerPosition(Vector3 player)

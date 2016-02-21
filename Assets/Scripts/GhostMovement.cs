@@ -6,18 +6,20 @@ namespace Game
     public class GhostMovement : MonoBehaviour
     {
 
-        private float moveSpeed = 1f;
-        private float angularMoveSpeed = 50f;
+        private float moveSpeed = 3f;
+        private float angularMoveSpeed = 80f;
         private float lastAngle;
         private float minDistance = 0.5f;
-        private BoxCollider2D boxCollider;
-        private Rigidbody2D rigidB;
         private Transform player;
+        private GameHandler gameHandler;
 
         // Use this for initialization
         void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player").transform;
+            gameHandler = GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<GameHandler>();
+            moveSpeed = gameHandler.ghostSpeed;
+            angularMoveSpeed = gameHandler.ghostAngularSpeed;
 
             Vector3 dir = player.position - transform.position;
             Quaternion rotat = Quaternion.LookRotation(dir, Vector3.down);
@@ -33,6 +35,7 @@ namespace Game
         // Update is called once per frame
         void FixedUpdate()
         {
+            player = GameObject.FindGameObjectWithTag("Player").transform;
             Move();
         }
 

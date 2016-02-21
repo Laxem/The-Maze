@@ -204,18 +204,14 @@ namespace Game
 
             listeBloc.Remove(newBloc);
 
-            //Debug.Log("bloc : " + newBloc.getX() + " " + newBloc.getY() + " " + listeBloc.Count);
-
             int a = 0;
             while ((a < listeContact.Count) && (maxi != listeContact.Count))
             {
                 int b = 0;
                 while (b < listeBloc.Count)
                 {
-                    //Debug.Log("case : " + listeBloc[b].getX() + " " + listeBloc[b].getY()+" "+ listeContact[a].getX() + " " + listeContact[a].getY());
                     if ( ((listeBloc[b].getX() == listeContact[a].getX()) && ((listeBloc[b].getY() == ((listeContact[a].getY()) - 1)) || (listeBloc[b].getY() == (listeContact[a].getY() + 1))) ) || ( (listeBloc[b].getY() == listeContact[a].getY()) && ((listeBloc[b].getX() == (listeContact[a].getX() - 1)) || (listeBloc[b].getX() == (listeContact[a].getX() + 1)))) )
                     {
-                        //Debug.Log("add : " + listeBloc[b].getX()+" "+listeBloc[b].getY());
                         listeContact.Add(new Coordonnée(listeBloc[b].getX(), listeBloc[b].getY() ) );
                         
                         listeBloc.RemoveAt(b);
@@ -227,15 +223,11 @@ namespace Game
                 }
                 a++;
             }
-            //Debug.Log("bloc fin : " + listeBloc.Count);
-            //Debug.Log("maxi : " + listeContact.Count);
             return maxi == listeContact.Count;
         }
 
         public static Map creerLabyrinthe(int largeur, int hauteur)
         {
-            //Random.seed = (int)Time.time;
-
             //on rend les dimensions impaire si elles ne le sont pas déjà
             int x = largeur - (largeur % 2) + 1;
             int y = hauteur - (hauteur % 2) + 1;
@@ -255,13 +247,8 @@ namespace Game
                 carte.setVal(x - 1, j, 4);
             }
 
-
-            int a = Mathf.Min(x, y);
-            int b = Mathf.Max(x, y);
-
             //on calcule le nombre de mur à créer avec une formule magique
-            int m = (a - 5) / 2;
-            int arret = ((b - a + 2) * (m + 1) + 4 * (m * (((m % 2) + m) / 2) + (m / 2) * (((m % 2) + 1) % 2)));
+            int arret = (x - 3) * (y - 3) / 2;
 
             //on crée la liste des blocs dans lesquels il est possible de faire un mur
             List<Coordonnée> listeLibre = new List<Coordonnée>();
@@ -299,22 +286,17 @@ namespace Game
 
                 carte.setVal(bloc.getX(), bloc.getY(), 1);
                 mur++;
-                //Coordonnée possible = alentour(carte, bloc);
-                //Debug.Log("possible : " + possible.getX() + " " + possible.getY());
                 if(!quickContact(carte, bloc))
                 {
                     if (!contact(carte, bloc, listeBloc, 0))
                     {
                         carte.setVal(bloc.getX(), bloc.getY(), 0);
                         mur--;
-                        //Debug.Log("bloc mauvais : " + bloc.getX() + " " + bloc.getY());
                     }
                     else listeBloc.Remove(bloc);
                 }
                 else listeBloc.Remove(bloc);
-
-
-
+                
                 listeLibre.RemoveAt(nbRand);
                 iteration++;
             }
