@@ -9,7 +9,7 @@ namespace Game
         public Button easy;
         public Button normal;
         public Button hard;
-        private GameHandler gameHandler;
+        public GameObject mazeCamera;
         private static int level = 2;
 
         // Use this for initialization
@@ -29,9 +29,24 @@ namespace Game
             }
         }
 
+        void Update()
+        {
+            int oldLevel = level;
+            if (Input.GetButtonDown("Up")) level -= 1;
+            else if (Input.GetButtonDown("Down")) level += 1;
+            if (level == 0) level = 3;
+            else if (level == 4) level = 1;
+            if (level != oldLevel)
+            {
+                changeDifficulty(level);
+                mazeCamera.GetComponent<GameHandler>().setDifficulty(level);
+            }
+        }
+
         public void changeDifficulty(int newLevel)
         {
             level = newLevel;
+            Debug.Log(level);
             easy.interactable = true;
             normal.interactable = true;
             hard.interactable = true;

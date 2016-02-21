@@ -18,13 +18,15 @@ namespace Game
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetButtonDown("R"))
+            if (Input.GetButtonDown("R") || Input.GetButtonDown("Enter") || Input.GetButtonDown("Return"))
             {
+                Debug.Log("enter");
                 restart.onClick.Invoke();
             }
             if (Input.GetButtonDown("Echap"))
             {
-                quit.onClick.Invoke();
+                Debug.Log("esc");
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MainCameraHandler>().ExitGame();
             }
         }
     }

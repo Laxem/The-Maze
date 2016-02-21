@@ -42,7 +42,7 @@ namespace Game
 
         void Update()
         {
-            if (Input.GetButtonDown("Echap"))
+            if (Input.GetButtonDown("Echap") || Input.GetButtonDown("Pause"))
             {
                 pause = true;
                 EnableAgent();

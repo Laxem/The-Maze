@@ -29,8 +29,7 @@ namespace Game
             }
             if (Input.GetButtonDown("Echap"))
             {
-                begin.onClick.Invoke();
-
+                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<MainCameraHandler>().ExitGame();
             }
         }
         
