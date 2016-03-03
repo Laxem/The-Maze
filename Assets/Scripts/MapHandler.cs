@@ -10,8 +10,13 @@ namespace Game
         public GameObject depart;
         public GameObject exit;
         public GameObject lockExit;
-        public GameObject floor;                           
+        public GameObject floor;
         public GameObject wall;
+        public Sprite wall1;
+        public Sprite wall2;
+        public Sprite wall22;
+        public Sprite wall3;
+        public Sprite wall4;
         public GameObject invisibleWall;
         public GameObject player;
         public GameObject key;
@@ -42,31 +47,30 @@ namespace Game
             {
                 for (int y = 0; y < maze.getSize().getY(); y++)
                 {
-                    GameObject toInstantiate;
-
                     if (maze.getVal(x, y) == 1)
-                        toInstantiate = wall;
+                        PlaceWall(maze, x, y);
                     else if (maze.getVal(x, y) == 2)
                     {
-                        toInstantiate = depart;
                         coorDepart.setVal(x + 1, y + 1);
+                        PlaceEntryExit(maze, x, y, depart);
                     }
                     else if (maze.getVal(x, y) == 3)
                     {
-                        toInstantiate = lockExit;
-                        instance = Instantiate(toInstantiate, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                        instance = Instantiate(lockExit, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
                         instance.transform.SetParent(boardHolder);
-                        toInstantiate = exit;
-                    }
-                    else toInstantiate = floor;
 
-                    instance = Instantiate(toInstantiate, new Vector3(x+1, y+1, 0f), Quaternion.identity) as GameObject;
-                    instance.transform.SetParent(boardHolder);
+                        PlaceEntryExit(maze, x, y, exit);
+                    }
+                    else
+                    {
+                        instance = Instantiate(floor, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                        instance.transform.SetParent(boardHolder);
+                    }
                     
                 }
             }
 
-            for (int x = 0; x < maze.getSize().getX() + 2; x++) // ajout de mur invisible autour du labyrinthe
+            for (int x = 0; x < maze.getSize().getX() + 2; x++) // add of invisible wall around the maze
             {
                 for (int y = 0; y < maze.getSize().getY() + 2; y++)
                 {
@@ -84,6 +88,16 @@ namespace Game
             PlaceKeyAndGhost(boardHolder, maze, coorDepart, coorExit);
         }
 
+        void PlaceEntryExit(Map maze, int x, int y, GameObject tile)
+        {
+            GameObject instance;
+            instance = Instantiate(tile, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(boardHolder);
+            if (maze.getVal(x, y + 1) == -1) instance.transform.rotation = Quaternion.Euler(0f, 0f, 180);
+            else if (maze.getVal(x + 1, y) == -1) instance.transform.rotation = Quaternion.Euler(0f, 0f, 90);
+            else if (maze.getVal(x - 1, y) == -1) instance.transform.rotation = Quaternion.Euler(0f, 0f, 270);
+        }
+
         public void PlaceKeyAndGhost(Transform boardHolder, Map carte, Coordonnée depart, Coordonnée exit)
         {
             List<Coordonnée> listCoorKey = new List<Coordonnée>();
@@ -91,7 +105,7 @@ namespace Game
 
             int sizeMap = Mathf.Min(carte.getSize().getX(), carte.getSize().getY());
             int distanceKey = (sizeMap - (sizeMap % 1)) / 2;
-            int distanceGhost = (sizeMap + 1) / 2;
+            int distanceGhost = (sizeMap + 1) * 3 / 4;
             
             for (int x = 1; x < carte.getSize().getX()-1; x++) // ajout de mur invisible autour du labyrinthe
             {
@@ -131,8 +145,107 @@ namespace Game
             if ((Mathf.Abs(a.getX() - b.getX()) + Mathf.Abs(a.getY() - b.getY())) < distance) return false;
             else return true;
         }
-        
-        
+
+        void PlaceWall(Map maze, int x, int y)
+        {
+            int wallAround = 0;  // each power of 10 represent a block around the wall placed
+            if (maze.getVal(x, y + 1) == 1) wallAround += 1000; //top
+            if (maze.getVal(x + 1, y) == 1) wallAround += 100;  //right
+            if (maze.getVal(x, y - 1) == 1) wallAround += 10;   //bottom
+            if (maze.getVal(x - 1, y) == 1) wallAround += 1;    //left
+
+            GameObject instance;
+
+            switch (wallAround)
+            {
+                case 1000 :
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall1;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 180);
+                    break;
+                case 100:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall1;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 90);
+                    break;
+                case 10:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall1;
+                    break;
+                case 1:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall1;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 270);
+                    break;
+                case 1100:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall22;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 270);
+                    break;
+                case 1010:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall2;
+                    break;
+                case 1001:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall22;
+                    break;
+                case 0110:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall22;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 180);
+                    break;
+                case 0101:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall2;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 270);
+                    break;
+                case 0011:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall22;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 90);
+                    break;
+                case 1110:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall3;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 270);
+                    break;
+                case 1101:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall3;
+                    break;
+                case 1011:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall3;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 90);
+                    break;
+                case 0111:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall3;
+                    instance.transform.rotation = Quaternion.Euler(0f, 0f, 180);
+                    break;
+                case 1111:
+                    instance = Instantiate(wall, new Vector3(x + 1, y + 1, 0f), Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(boardHolder);
+                    instance.GetComponent<SpriteRenderer>().sprite = wall4;
+                    break;
+            }
+            
+        }
 
         void SetCamSize(int sizeMap)
         {

@@ -110,6 +110,7 @@ namespace Game
         }
         public int getVal(int x, int y)
         {
+            if (x < 0 || x >= sizeX || y < 0 || y >= sizeY) return -1;
             return map[y * sizeX + x];
         }
 

@@ -14,6 +14,7 @@ namespace Game
         public Text Timer;
         private float baseTime;
         private float currentTime;
+        private float pauseTime;
         private GameHandler gameHandler;
 
         // Use this for initialization
@@ -21,7 +22,7 @@ namespace Game
         {
             gameHandler = GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<GameHandler>();
             baseTime = gameHandler.time;
-            
+            pauseTime = 0;
         }
 
         // Update is called once per frame
@@ -55,7 +56,8 @@ namespace Game
             border.sizeDelta = new Vector2(sizeMazeBorder, (Screen.height - sizeMazeBorder) / 2 - 10);
             border.position = new Vector3(Screen.width / 2, Screen.height - ((Screen.height - sizeMazeBorder) / 2 - 10)/2, 0f);
 
-            if(!gameHandler.pause && !gameHandler.endGame)currentTime = Time.time - baseTime;
+            if (!gameHandler.pause && !gameHandler.endGame) currentTime = Time.time - baseTime - pauseTime;
+            else pauseTime += Time.fixedDeltaTime;
             int minute = (int)(currentTime / 60);
             int second = (int)Mathf.Floor(currentTime)%60;
             string seconds = "";
@@ -63,6 +65,11 @@ namespace Game
             int hundredth = (int)(Mathf.Repeat(currentTime, 1)*100);
             Timer.text = "Temps "+minute+":"+seconds+second+":"+hundredth;
 
+        }
+
+        public void RazTime()
+        {
+            pauseTime = 0;
         }
     }
 }

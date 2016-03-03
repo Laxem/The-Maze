@@ -7,6 +7,7 @@ namespace Game
     public class UIMenuScaler : MonoBehaviour {
 
         public Image background;
+        public Image Title;
         public Text title;
         public Text explaning;
         public Canvas difficulty;
@@ -38,7 +39,7 @@ namespace Game
             //background
             UISetdisplay(background, Screen.width / 2, Screen.height / 2, Screen.width, Screen.height);
             //title
-            UISetdisplay(title, Screen.width / 2, Screen.height * 0.77f, Screen.width / 2, Screen.height / 4);
+            UISetdisplay(Title, Screen.width / 2, Screen.height * 0.77f, Screen.width / 2, Screen.height / 4);
             //explaning
             UISetdisplay(explaning, Screen.width / 2, Screen.height * 3 / 16, Screen.width, Screen.height / 8);
             //difficulty

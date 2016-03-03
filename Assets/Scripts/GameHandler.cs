@@ -23,8 +23,9 @@ namespace Game
         private MapHandler MapScript;
         private PlayerMovement player;
         private GhostMovement[] foes;
-        
-        
+        private Key key;
+
+
 
         void Awake()
         {
@@ -44,9 +45,13 @@ namespace Game
         {
             if (Input.GetButtonDown("Echap") || Input.GetButtonDown("Pause"))
             {
-                pause = true;
-                DisableAgent();
-                OpenEndWindow();
+                if (!pause && !endGame)
+                {
+                    pause = true;
+                    endCanvas.GetComponentInChildren<UIEndHandler>().pause = true;
+                    EnableAgent(false);
+                    OpenEndWindow();
+                }                
             }
         }
 
@@ -83,6 +88,7 @@ namespace Game
 
         void setAgents()
         {
+            
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
             GameObject[] foesList = GameObject.FindGameObjectsWithTag("Foe");
             foes = new GhostMovement[foeNumber];
@@ -90,6 +96,7 @@ namespace Game
             {
                 foes[i] = foesList[i].GetComponent<GhostMovement>();
             }
+            key = GameObject.FindGameObjectWithTag("Key").GetComponent<Key>();
         }
         
         void OpenEndWindow()
@@ -139,21 +146,23 @@ namespace Game
             }
         }
 
-        void DisableAgent()
+        public void EnableAgent(bool enable)
         {
-            player.enabled = false;
+            player.enabled = enable;
+            player.GetComponent<Animator>().SetBool("move", enable);
             foreach (GhostMovement foe in foes)
             {
-                foe.enabled = false;
+                foe.enabled = enable;
+                foe.GetComponent<Animator>().SetBool("move", enable);
             }
+            key.GetComponent<Animator>().SetBool("turn", enable);
         }
 
         public void GameOver()
         {
             win = false;
             endGame = true;
-
-            DisableAgent();
+            EnableAgent(false);
 
             OpenEndWindow();
         }
@@ -164,7 +173,7 @@ namespace Game
             {
                 win = true;
                 endGame = true;
-                DisableAgent();
+                EnableAgent(false);
                 OpenEndWindow();
             }
             

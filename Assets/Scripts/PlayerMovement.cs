@@ -6,10 +6,12 @@ namespace Game
     public class PlayerMovement : MonoBehaviour
     {
         private float moveSpeed = 5f;
+        private float angle = 0;
         private LayerMask blockingLayer;
-        private BoxCollider2D boxCollider;
+        private CircleCollider2D circleCollider;
         private Rigidbody2D rigidB;
         private GameHandler gameHandler;
+        private Animator animator;
         [HideInInspector] public static bool pause = false;
 
         private string horizontalAxeName;
@@ -17,8 +19,9 @@ namespace Game
         
         void Start()
         {
-            boxCollider = GetComponent<BoxCollider2D>();
+            circleCollider = GetComponent<CircleCollider2D>();
             rigidB = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
 
             horizontalAxeName = "Horizontal";
             verticalAxeName = "Vertical";
@@ -39,30 +42,41 @@ namespace Game
             //Check if we have a non-zero value for horizontal or vertical
             if (horizontal != 0 || vertical != 0)
             {
-                //InputToDir(ref horizontal, ref vertical);              
+                animator.SetBool("move", true);           
                 horizontal = horizontal * moveSpeed * Time.deltaTime;
                 vertical = vertical * moveSpeed * Time.deltaTime;
 
                 Move(horizontal, vertical);
             }
+            else animator.SetBool("move", false);
+            RotatePlayer(horizontal, vertical);
 
-            
             CameraHandler camerahandler =  GameObject.FindGameObjectWithTag("MazeCamera").GetComponent<CameraHandler>();
             camerahandler.SetPlayerPosition(transform.position);
         }
 
-        private void InputToDir(ref float horizontal, ref float vertical)
+        void RotatePlayer(float horizontal, float vertical)
         {
-            if (horizontal != 0 && vertical != 0)
+            if(horizontal > 0)
             {
-                horizontal = horizontal * moveSpeed * Time.deltaTime / 1.415f;  // 1.415 correspond to an approximation of square root of 2
-                vertical = vertical * moveSpeed * Time.deltaTime / 1.415f;
+                if (vertical > 0) angle = 135;
+                else if (vertical < 0) angle = 45;
+                else angle = 90;
+            }
+            else if(horizontal < 0)
+            {
+                if (vertical > 0) angle = 225;
+                else if (vertical < 0) angle = 315;
+                else angle = 270;
             }
             else
             {
-                horizontal = horizontal * moveSpeed * Time.deltaTime;
-                vertical = vertical * moveSpeed * Time.deltaTime;
+                if (vertical > 0) angle = 180;
+                else if (vertical < 0) angle = 0;
             }
+            
+
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
 
         protected bool Move(float xDir, float yDir)
@@ -73,11 +87,11 @@ namespace Game
 
             Vector2 end = start + new Vector2(xDir, yDir);
 
-            boxCollider.enabled = false;
+            circleCollider.enabled = false;
 
             hit = Physics2D.Linecast(start, end, blockingLayer);
 
-            boxCollider.enabled = true;
+            circleCollider.enabled = true;
 
             //Debug.Log(hit.distance);
             if (hit.collider == null)

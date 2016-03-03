@@ -15,7 +15,6 @@ namespace Game
 
         public void TouchPlayer()
         {
-            Debug.Log("Key");
             gameHandler.keyTaken = true;
             GameObject Lock = GameObject.FindGameObjectWithTag("Lock");
             Lock.SetActive(false);
